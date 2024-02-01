@@ -1,10 +1,17 @@
-﻿namespace Blakcjack21
+﻿using Blakcjack21.Models.Entities;
+using Blakcjack21.Models.Exceptions;
+using Blakcjack21.Models.Stable;
+namespace Blakcjack21
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Player gambler = new Player();
+
+            gambler.ShowHand();
+            gambler.AddCard(2);
+            gambler.ShowHand();
         }
     }
 }

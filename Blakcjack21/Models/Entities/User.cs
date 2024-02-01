@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Blakcjack21.Models.Entities
+ namespace Blakcjack21.Models.Entities
 {
     internal interface User
     {
         public void Bet(int amount);
+        public void AddCard(int count);
         public void Hit();
         public void Double();
         public void Pass();
+        public void ShowHand();
     }
 }

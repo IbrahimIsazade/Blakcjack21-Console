@@ -4,7 +4,12 @@ namespace Blakcjack21.Models.Entities
 {
     internal class Player : User
     {
-        Card[] cards = Array.Empty<Card>();
+        UserHand hand = new UserHand();
+
+        public void AddCard(int count)
+        {
+            hand.AddCard(count);
+        }
 
         public void Bet(int amount)
         {
@@ -24,6 +29,11 @@ namespace Blakcjack21.Models.Entities
         public void Pass()
         {
             throw new NotImplementedException();
+        }
+
+        public void ShowHand()
+        {
+            hand.ShowHand();
         }
     }
 }
