@@ -24,11 +24,14 @@ namespace Blakcjack21.Models.Entities
         public void Hit()
         {
             gamblerHand.AddCard();
-            Print.WriteLine($"Your hand now is:", Paint.Green);
-            foreach(Card card in gamblerHand)
+            Print.Write($"Your hand: ", Paint.Green);
+            foreach(var card in gamblerHand)
             {
                 Print.Write($"{card} ", Paint.Yellow);
             }
+            Console.WriteLine();
+            Print.Write($"Your balace: ", Paint.Green);
+            Print.Write(UserBalance+"\n", Paint.Yellow);
         }
 
         public void DealerHit()
@@ -64,6 +67,7 @@ namespace Blakcjack21.Models.Entities
 
             int userChoise = ReadInt.Read("Choose from list");
             Actions userAction = (Actions)Enum.ToObject(typeof(Actions), userChoise);
+            Console.Clear();
             return userAction;
         }
 
@@ -98,6 +102,8 @@ namespace Blakcjack21.Models.Entities
             #endregion
 
             gamblerHand.ShowHand();
+            Print.Write($"Your balace: ", Paint.Green);
+            Print.Write(UserBalance.ToString(), Paint.Yellow);
             DoAction();
         }
     }
