@@ -5,16 +5,8 @@ namespace Blakcjack21
     {
         static void Main(string[] args)
         {
-            //Game BlackJack = new Game(100);
-            //BlackJack.Start();
-
-            PlayerHand player = new PlayerHand();
-            player.AddCard(2);
-            foreach (var item in player)
-            {
-                Console.WriteLine(item);
-            }
-
+            Game BlackJack = new Game(100);
+            BlackJack.Start();
             Console.ReadKey();
         }
     }

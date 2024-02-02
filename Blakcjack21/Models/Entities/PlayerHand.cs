@@ -7,7 +7,7 @@ namespace Blakcjack21.Models.Entities
     internal class PlayerHand : User, IEnumerable<KeyValuePair<string, CardRank>>
     {
         Dictionary<string, CardRank> cards = new Dictionary<string, CardRank>();
-        Dictionary<string, CardRank> userHand = new Dictionary<string, CardRank>();
+        List<KeyValuePair<string, CardRank>> userHand = new List<KeyValuePair<string, CardRank>>();
 
         public PlayerHand()
         {
@@ -29,7 +29,8 @@ namespace Blakcjack21.Models.Entities
                 Suit suit = (Suit)Enum.ToObject(typeof(Suit), r.Next(1, 5));
                 CardRank rank = (CardRank)Enum.ToObject(typeof(CardRank), r.Next(2, 12));
                 string card = suit.ToString() + rank.ToString();
-                userHand.Add(card, rank);
+                KeyValuePair<string, CardRank> pair = new KeyValuePair<string, CardRank>(card, rank);
+                userHand.Add(pair);
             }
         }
 
@@ -45,7 +46,7 @@ namespace Blakcjack21.Models.Entities
             Print.Write($"Your hand: ", Paint.Green);
             foreach (var card in userHand)
             {
-                Print.Write($"{card} ", Paint.Yellow);
+                Print.Write($"{card.Key} ", Paint.Yellow);
             }
             Console.WriteLine();
         }
