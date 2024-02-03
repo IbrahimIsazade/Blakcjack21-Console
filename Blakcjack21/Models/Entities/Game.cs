@@ -9,14 +9,21 @@ namespace Blakcjack21.Models.Entities
         PlayerHand gamblerHand = new PlayerHand();
         PlayerHand dealerHand = new PlayerHand();
 
+        // Dealer's properties
+        public int DealerSum { get; private set; }
+
         // User's properties
         public int UserBid { get; private set; }
         public int UserBalance { get; private set; }
+        public int UserSum { get; private set; }
+        public bool UserBlackjack { get; private set; }
+
 
         public Game(int userBalance)
         {
             this.UserBalance = userBalance;
             this.UserBid = default;
+            this.UserBlackjack = false;
             gamblerHand.AddCard(2);
             dealerHand.AddCard(2);
         }
@@ -25,13 +32,13 @@ namespace Blakcjack21.Models.Entities
         {
             gamblerHand.AddCard();
             Print.WriteLine($"You hit", Paint.Blue);
-            gamblerHand.ShowHand();
-            Print.Write($"Your balace: ", Paint.Green);
-            Print.Write(UserBalance+"\n", Paint.Yellow);
+            UserSum = gamblerHand.GetSumOfHand();
+            ShowGamblerInfo();
         }
 
         public void DealerHit()
         {
+            DealerSum = dealerHand.GetSumOfHand();
             dealerHand.AddCard();
         }
 
@@ -39,7 +46,8 @@ namespace Blakcjack21.Models.Entities
         {
             this.UserBid *= 2;
             gamblerHand.AddCard();
-
+            UserSum = gamblerHand.GetSumOfHand();
+            ShowGamblerInfo();
         }
 
         public void Pass()
@@ -76,14 +84,30 @@ namespace Blakcjack21.Models.Entities
                     break;
 
                 case 2:
+                    Double();
                     break;
 
                 case 3:
+                    Pass();
                     break;
 
                 case 4:
+                    Environment.Exit(0);
                     break;
             }
+        }
+
+        public void ShowGamblerInfo()
+        {
+            gamblerHand.ShowHand();
+            Print.Write($"Your balace: ", Paint.Green);
+            Print.Write(UserBalance.ToString() + "\n", Paint.White);
+            Print.Write($"Your bid: ", Paint.Green);
+            Print.Write(UserBid.ToString() + "\n", Paint.White);
+            Print.Write($"Your hand's weight: ", Paint.Green);
+            Print.Write(gamblerHand.GetSumOfHand().ToString() + "\n", Paint.White);
+            Print.Write($"Dealer's first card: ", Paint.Green);
+            dealerHand.ShowFirstCard();
         }
 
         public void Start()
@@ -98,7 +122,7 @@ namespace Blakcjack21.Models.Entities
 
             #region Tutorial
             char choise;
-            Print.Write("If you want to see tutorial ? (y/n): ", Paint.Yellow);
+            Print.Write("Would you like to see tutorial ? (y/n): ", Paint.Yellow);
         l1:
             if(!char.TryParse(Console.ReadLine(), out choise))
             {
@@ -118,16 +142,28 @@ namespace Blakcjack21.Models.Entities
             else if(choise == 'n') { }
             else { goto l1; }
             #endregion
+            
+            ShowGamblerInfo();
+            while (UserSum < 22)
+            {
+                if(UserSum == 21)
+                {
+                    if (gamblerHand.TryFind(CardRank.Ace))
+                    {
+                        if (gamblerHand.TryFind(CardRank.King) ||
+                            gamblerHand.TryFind(CardRank.Queen) ||
+                            gamblerHand.TryFind(CardRank.Jack))
+                        {
+                            UserBlackjack = true;
+                            Print.Write($"You lost with sum of hand: ", Paint.Green);
+                            gamblerHand.ShowHand();
+                        }
+                    }
+                }
+                DoAction();
+            }
+            Print.WriteLine($"You lost with sum of hand: {gamblerHand.GetSumOfHand()}", Paint.Red);
 
-            #region Showing gambler's info
-            gamblerHand.ShowHand();
-            Print.Write($"Your balace: ", Paint.Green);
-            Print.Write(UserBalance.ToString() + "\n", Paint.Yellow);
-            Print.Write($"Your bid: ", Paint.Green);
-            Print.Write(UserBid.ToString() + "\n", Paint.Yellow);
-            #endregion
-
-            DoAction();
 
             Console.WriteLine("END");
         }
